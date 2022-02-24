@@ -1,42 +1,38 @@
 ---
 apiVersion: 1.0.0
 metadata:
-  generateName: cpp-
+  generateName: QuEST-IDE-
 projects:
-  -
-    name: cpp-hello-world
+  - name: Hello-World
     source:
       type: git
-      location: 'https://github.com/che-samples/cpp-hello-world'
+      location: 'https://github.com/Developer-QuEST/Cloud-IDE'
 components:
   - type: chePlugin
     id: eclipse-cdt/cdt-vscode/latest
     alias: cpp-plugin
   - type: dockerimage
     alias: cpp-dev
-    image: quay.io/eclipse/che-cpp-rhel7:ce0526f
+    image: 'quay.io/eclipse/che-cpp-rhel7@sha256:aaf8cb7ff6d0559867fd14c59ddb87e7e642ab2dcb99807f407e95f2c45e1f84'
     memoryLimit: 512Mi
     mountSources: true
 commands:
-  -
-    name: build
+  - name: build
     actions:
       - type: exec
         component: cpp-dev
-        command: g++ -g hello.cpp -o hello.out && echo "Build complete"
-        workdir: ${CHE_PROJECTS_ROOT}/cpp-hello-world
-  -
-    name: run
+        command: gcc -g hello_world.c -o hello_world.out && echo "Build complete"
+        workdir: '${CHE_PROJECTS_ROOT}/Hello-World'
+  - name: run
     actions:
       - type: exec
         component: cpp-dev
-        command: ./hello.out
-        workdir: ${CHE_PROJECTS_ROOT}/cpp-hello-world
-  -
-    name: debug
+        command: ./hello_world.out
+        workdir: '${CHE_PROJECTS_ROOT}/Hello-World'
+  - name: debug
     actions:
       - type: vscode-launch
-        referenceContent: >
+        referenceContent: |
           {
             "version": "0.2.0",
             "configurations": [
@@ -44,7 +40,7 @@ commands:
                     "type": "gdb",
                     "name": "Debug c++ application",
                     "request": "launch",
-                    "program": "/projects/cpp-hello-world/hello.out"
+                    "program": "/projects/Hello-World/hello_world.out"
                 }
             ]
           }
